@@ -1,0 +1,30 @@
+# Python bytecode (compiled files)
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual Environment
+venv/
+.venv/
+env/
+
+# Database (VERY IMPORTANT)
+db.sqlite3
+db.sqlite3-journal
+
+# Environment secrets
+.env
+
+# Static & Media files
+# (These are generated or uploaded, don't need them on GitHub)
+staticfiles/
+media/
+
+# IDE Settings
+.vscode/
+.idea/
+*.swp
+
+# OS-specific files
+.DS_Store
+Thumbs.db
