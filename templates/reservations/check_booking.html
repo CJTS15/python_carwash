@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+{% load humanize %}
+
+{% block content %}
+<div class="max-w-3xl mx-auto">
+    <!-- Header Section -->
+    <div class="text-center mb-10">
+        <h1 class="text-4xl font-extrabold mb-4">How's My Car?</h1>
+        <p class="text-slate-500 dark:text-slate-400">Enter your vehicle's plate number to see your appointment status.</p>
+    </div>
+
+    <!-- Search Bar Section -->
+    <div class="bg-white dark:bg-slate-900 p-2 rounded-2xl shadow-md border border-slate-100 dark:border-slate-800 mb-10">
+        <form method="GET" action="{% url 'check_booking' %}" class="flex flex-col sm:flex-row gap-2">
+            <div class="relative flex-grow">
+                <div class="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <svg class="h-5 w-5 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                    </svg>
+                </div>
+                <input type="text" name="plate" value="{{ query|default:'' }}" 
+                    placeholder="e.g. ABC 1234" required
+                    class="block w-full pl-11 pr-4 py-4 rounded-xl border-none bg-slate-50 dark:bg-slate-800 dark:text-white focus:ring-2 focus:ring-blue-500 outline-none transition uppercase">
+            </div>
+            <button type="submit" class="bg-blue-600 text-white font-bold px-8 py-4 rounded-xl hover:bg-blue-700 transition shadow-md shadow-blue-200 dark:shadow-none">
+                Search
+            </button>
+        </form>
+    </div>
+
+    <!-- Results Section -->
+    {% if query %}
+        {% if results %}
+            <div class="space-y-6">
+                <h2 class="text-sm font-bold text-slate-400 uppercase tracking-widest px-2">Results for "{{ query.upper }}"</h2>
+                
+                {% for booking in results %}
+                <div class="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-3xl p-6 shadow-sm hover:border-blue-300 dark:hover:border-blue-500 transition-colors">
+                    <div class="flex flex-col md:flex-row justify-between gap-6">
+                        
+                        <!-- Left Info -->
+                        <div class="space-y-3">
+                            <div>
+                                <span class="text-xs font-bold text-blue-600 dark:text-blue-400 uppercase">{{ booking.service.name }}</span>
+                                <h3 class="text-2xl font-bold dark:text-white">{{ booking.date|date:"F d, Y" }}</h3>
+                                <p class="text-slate-500 font-medium">{{ booking.time_slot|time:"g:i A" }} — {{ booking.expected_finish_time }}</p>
+                            </div>
+                            
+                            <div class="flex flex-wrap gap-2">
+                                <span class="px-3 py-1 bg-slate-100 dark:bg-slate-800 rounded-lg text-xs font-bold text-slate-600 dark:text-slate-400">
+                                    {{ booking.car_model }}
+                                </span>
+                                <span class="px-3 py-1 bg-blue-50 dark:bg-blue-900/30 rounded-lg text-xs font-bold text-blue-700 dark:text-blue-300">
+                                    {{ booking.car_plate }}
+                                </span>
+                            </div>
+                        </div>
+
+                        <!-- Right Info (Status & Price) -->
+                        <div class="flex flex-col md:items-end justify-between">
+
+                            <div class="flex flex-row gap-4">
+                                <!-- STAFF ASSIGNED -->
+                                {% if booking.assigned_staff %}
+                                    <div class="flex items-center px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/20 border border-blue-100 dark:border-blue-800 text-blue-700 dark:text-blue-400 text-xs font-bold uppercase">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+                                        </svg> Washer: 
+                                        {{ booking.assigned_staff.first_name|default:booking.assigned_staff.username }}
+                                    </div>
+                                {% endif %}
+    
+                                <!-- STATUS -->
+                                {% if booking.status == 'pending' %}
+                                    <div class="px-4 py-1 rounded-full bg-amber-100 text-amber-700 text-xs font-bold uppercase">Pending</div>
+                                {% elif booking.status == 'confirmed' %}
+                                    <div class="px-4 py-1 rounded-full bg-green-100 text-green-700 text-xs font-bold uppercase">Confirmed</div>
+                                {% elif booking.status == 'progress' %}
+                                    <div class="px-4 py-1 rounded-full bg-green-600 text-white text-xs font-bold uppercase animate-pulse">In Progress</div>
+                                {% elif booking.status == 'canceled' %}
+                                    <div class="px-4 py-1 rounded-full bg-slate-100 text-slate-500 text-xs font-bold uppercase">Canceled</div>
+                                {% else %}
+                                    <div class="px-4 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold uppercase">{{ booking.status }}</div>
+                                {% endif %}
+                            </div>
+
+                            <div class="mt-4 md:mt-0 md:text-right">
+                                <p class="text-[10px] text-slate-400 font-bold uppercase">Estimated Total</p>
+                                <p class="text-2xl font-bold text-slate-900 dark:text-white">{{ booking.total_price_range }}</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Add-ons Footer -->
+                    {% if booking.add_ons.all %}
+                    <div class="mt-6 pt-4 border-t border-slate-100 dark:border-slate-800 flex gap-2">
+                        {% for addon in booking.add_ons.all %}
+                        <span class="text-sm text-slate-400 italic">+ {{ addon.name }}</span>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <!-- No Results State -->
+            <div class="text-center py-16 bg-white dark:bg-slate-900 rounded-3xl border-2 border-dashed border-slate-200 dark:border-slate-800">
+                <div class="bg-slate-50 dark:bg-slate-800 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="h-8 w-8 text-slate-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 9.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
+                </div>
+                <h3 class="text-xl font-bold dark:text-white mb-2">No bookings found</h3>
+                <p class="text-slate-500 dark:text-slate-400 max-w-xs mx-auto mb-6">We couldn't find any records for plate "{{ query.upper }}". Check for typos or book a new wash.</p>
+                <a href="{% url 'index' %}" class="text-blue-600 font-bold hover:underline">Book a Wash Now →</a>
+            </div>
+        {% endif %}
+    {% endif %}
+</div>
+{% endblock %}

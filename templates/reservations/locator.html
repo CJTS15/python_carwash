@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto">
+    <div class="text-center mb-12">
+        <h1 class="text-4xl font-extrabold mb-4">Visit Our Shop</h1>
+        <p class="text-slate-500 dark:text-slate-400">Experience premium care for your vehicle at our Bonbon branch.</p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-8 items-start">
+        <!-- Left: Information Cards -->
+        <div class="space-y-6">
+            <!-- Location Card -->
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-md">
+                <div class="flex items-start space-x-4">
+                    <div class="bg-blue-100 dark:bg-blue-900/30 p-3 rounded-2xl text-blue-600 dark:text-blue-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold dark:text-white mb-1">Our Address</h3>
+                        <p class="text-slate-600 dark:text-slate-400 leading-relaxed">
+                            Velez Carwash<br>
+                            Bonbon, Cagayan de Oro City<br>
+                            Misamis Oriental, Philippines
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Operating Hours Card -->
+            <div class="bg-white dark:bg-slate-900 p-8 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-md">
+                <div class="flex items-start space-x-4">
+                    <div class="bg-green-100 dark:bg-green-900/30 p-3 rounded-2xl text-green-600 dark:text-green-400">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div>
+                        <h3 class="text-lg font-bold dark:text-white mb-1">Operating Hours</h3>
+                        <p class="text-slate-600 dark:text-slate-400">Monday — Sunday</p>
+                        <p class="text-2xl font-bold text-slate-900 dark:text-white mt-1">8:00 AM - 6:00 PM</p>
+                    </div>
+                </div>
+            </div>
+
+            <a href="{% url 'index' %}" class="block text-center bg-blue-600 text-white font-bold py-4 rounded-2xl hover:bg-blue-700 transition shadow-md shadow-blue-200 dark:shadow-none">
+                Book a Wash Now
+            </a>
+        </div>
+
+        <!-- Right: Google Maps Embed -->
+        <div class="bg-white dark:bg-slate-900 p-2 rounded-3xl border border-slate-100 dark:border-slate-800 shadow-md h-[450px]">
+            <iframe 
+                class="w-full h-full rounded-2xl grayscale dark:invert-[0.9] dark:hue-rotate-180"
+                src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d15781.087224424904!2d124.6196238!3d8.5215082!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x32ff8d9276537b8b%3A0x8898952451f2f01d!2sBonbon%2C%20Cagayan%20de%20Oro%2C%20Misamis%20Oriental!5e0!3m2!1sen!2sph!4v1700000000000!5m2!1sen!2sph" 
+                style="border:0;" 
+                allowfullscreen="" 
+                loading="lazy">
+            </iframe>
+        </div>
+    </div>
+</div>
+{% endblock %}
