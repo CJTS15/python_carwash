@@ -2,6 +2,8 @@ from django.contrib import admin
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from reservations import views
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     # --- Administrative Portal ---
@@ -30,3 +32,6 @@ urlpatterns = [
 
     path('locator/', views.locator, name='locator'),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

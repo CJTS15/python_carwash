@@ -13,6 +13,7 @@ class AddOn(models.Model):
 class Service(models.Model):
     name = models.CharField(max_length=100)
     description = models.TextField()
+    image = models.ImageField(upload_to='services/', null=True, blank=True) 
     min_price = models.DecimalField(max_digits=7, decimal_places=2, default=0)
     max_price = models.DecimalField(max_digits=7, decimal_places=2, default=0)
     duration_minutes = models.IntegerField(default=60)
